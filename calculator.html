@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الحاسبة الشاملة | الليرة عملتنا</title>
+    <meta name="description" content="حاسبة شاملة لتحويل العملات وحساب الذهب والمحروقات والكهرباء">
+    <link rel="canonical" href="https://lirasyp.com/calculator.html">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#6366f1">
+    <!-- Supabase Official Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+    <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo"><img src="images/logo.png" alt="الليرة عملتنا" width="40" height="40"><span>الليرة عملتنا</span></div>
+            <button id="close-sidebar" class="icon-btn"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="index.html" class="nav-item"><span class="nav-icon">🏠</span><span>الرئيسية</span></a>
+            <a href="currencies.html" class="nav-item"><span class="nav-icon">💱</span><span>أسعار صرف العملات</span></a>
+            <a href="gold.html" class="nav-item"><span class="nav-icon">🥇</span><span>أسعار الذهب</span></a>
+            <a href="crypto.html" class="nav-item"><span class="nav-icon">₿</span><span>العملات الرقمية</span></a>
+            <a href="fuel.html" class="nav-item"><span class="nav-icon">⛽</span><span>أسعار المحروقات</span></a>
+            <a href="electricity.html" class="nav-item"><span class="nav-icon">⚡</span><span>أسعار الكهرباء</span></a>
+            <a href="news.html" class="nav-item"><span class="nav-icon">📰</span><span>الأخبار العالمية</span></a>
+            <a href="calculator.html" class="nav-item active"><span class="nav-icon">🧮</span><span>الحاسبة الشاملة</span></a>
+            <a href="wallet.html" class="nav-item"><span class="nav-icon">👛</span><span>المحفظة الذكية</span></a>
+            <a href="notifications.html" class="nav-item"><span class="nav-icon">🔔</span><span>إعدادات الإشعارات</span></a>
+        </nav>
+        <div class="sidebar-footer">
+            <button id="theme-toggle-sidebar" class="theme-toggle"><span class="theme-icon">🌙</span><span class="theme-text">الوضع الليلي</span></button>
+        </div>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="main-header">
+            <button id="open-sidebar" class="icon-btn"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+            <div class="header-logo"><img src="images/logo.png" alt="الليرة عملتنا" width="32" height="32"><h1>الحاسبة الشاملة</h1></div>
+            <div class="header-actions">
+                <button id="theme-toggle" class="icon-btn">
+                    <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                </button>
+            </div>
+        </header>
+
+        <main class="page-content">
+            <div class="calc-tabs">
+                <button class="calc-tab active" data-tab="currency">💱 العملات</button>
+                <button class="calc-tab" data-tab="gold">🥇 الذهب</button>
+                <button class="calc-tab" data-tab="fuel">⛽ المحروقات</button>
+                <button class="calc-tab" data-tab="electricity">⚡ الكهرباء</button>
+            </div>
+
+            <!-- Currency Panel -->
+            <div class="calc-panel active" id="panel-currency">
+                <div class="calc-card">
+                    <h2>💱 محول العملات</h2>
+                    <div class="converter-box">
+                        <div class="conv-input-group">
+                            <label>المبلغ</label>
+                            <input type="number" id="cur-amount" value="100" min="0" step="0.01">
+                        </div>
+                        <div class="conv-select-group">
+                            <label>من</label>
+                            <select id="cur-from">
+                                <option value="USD">🇺🇸 دولار أمريكي</option>
+                                <option value="EUR">🇪🇺 يورو</option>
+                                <option value="TRY">🇹🇷 ليرة تركية</option>
+                                <option value="SAR">🇸🇦 ريال سعودي</option>
+                                <option value="AED">🇦🇪 درهم إماراتي</option>
+                                <option value="QAR">🇶🇦 ريال قطري</option>
+                                <option value="JOD">🇯🇴 دينار أردني</option>
+                                <option value="IQD">🇮🇶 دينار عراقي</option>
+                                <option value="GBP">🇬🇧 جنيه إسترليني</option>
+                                <option value="CHF">🇨🇭 فرنك سويسري</option>
+                                <option value="SYP" selected>🇸🇾 ليرة سورية</option>
+                            </select>
+                        </div>
+                        <button id="cur-swap" class="swap-btn" title="تبديل">⇄</button>
+                        <div class="conv-select-group">
+                            <label>إلى</label>
+                            <select id="cur-to">
+                                <option value="USD" selected>🇺🇸 دولار أمريكي</option>
+                                <option value="EUR">🇪🇺 يورو</option>
+                                <option value="TRY">🇹🇷 ليرة تركية</option>
+                                <option value="SAR">🇸🇦 ريال سعودي</option>
+                                <option value="AED">🇦🇪 درهم إماراتي</option>
+                                <option value="QAR">🇶🇦 ريال قطري</option>
+                                <option value="JOD">🇯🇴 دينار أردني</option>
+                                <option value="IQD">🇮🇶 دينار عراقي</option>
+                                <option value="GBP">🇬🇧 جنيه إسترليني</option>
+                                <option value="CHF">🇨🇭 فرنك سويسري</option>
+                                <option value="SYP">🇸🇾 ليرة سورية</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="converter-result-box">
+                        <div class="result-main" id="cur-result">--</div>
+                        <div class="result-sub" id="cur-rate-info">1 USD = -- SYP</div>
+                    </div>
+                    <div class="quick-amounts">
+                        <button class="quick-amount" data-amount="10">10</button>
+                        <button class="quick-amount" data-amount="50">50</button>
+                        <button class="quick-amount" data-amount="100">100</button>
+                        <button class="quick-amount" data-amount="500">500</button>
+                        <button class="quick-amount" data-amount="1000">1,000</button>
+                        <button class="quick-amount" data-amount="5000">5,000</button>
+                        <button class="quick-amount" data-amount="10000">10,000</button>
+                        <button class="quick-amount" data-amount="100000">100,000</button>
+                    </div>
+                </div>
+            </div>
+
+         <!-- Gold Panel -->
+<div class="calc-panel" id="panel-gold">
+    <div class="calc-card">
+        <h2>🥇 حاسبة الذهب</h2>
+        <div class="calc-form">
+            <div class="calc-group">
+                <label>الوزن بالغرام</label>
+                <input type="number" id="gold-calc-weight" value="1" min="0" step="0.1">
+            </div>
+            <div class="calc-group">
+                <label>العيار</label>
+                <select id="gold-calc-karat">
+                     <option value="">إختر العيار</option>
+                    <option value="24">عيار 24</option>
+                    <option value="22">عيار 22</option>
+                    <option value="21">عيار 21</option>
+                    <option value="18">عيار 18</option>
+                    <option value="14">عيار 14</option>
+                </select>
+            </div>
+            <div 
+
+                <input type="number" id="gold-calc-price" placeholder="جاري التحميل..." readonly>
+            </div>
+
+            <div class="result-card">
+                <span class="result-label">سعر الغرام</span>
+                <span class="result-value" id="gold-calc-per-gram">--</span>
+            </div>
+
+
+            <button id="calc-gold-btn" class="btn-primary btn-full">احسب</button>
+        </div>
+        <div class="calc-results" id="gold-calc-results">
+            <div class="result-card highlight">
+                <span class="result-label">القيمة الإجمالية بالليرة السورية</span>
+                <span class="result-value" id="gold-calc-total">--</span>
+            </div>
+
+            <div class="result-card">
+                <span class="result-label">السعر بالدولار</span>
+                <span class="result-value" id="gold-calc-usd">--</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+            <!-- Fuel Panel -->
+            <div class="calc-panel" id="panel-fuel">
+                <div class="calc-card">
+                    <h2>⛽ حاسبة المحروقات</h2>
+                    <div class="calc-form">
+                        <div class="calc-group">
+                            <label>نوع الوقود</label>
+                            <select id="fuel-calc-type">
+                                <option value="95">بنزين 95</option>
+                                <option value="90">بنزين 90</option>
+                                <option value="mazot">مازوت</option>
+                                <option value="gas">غاز منزلي</option>
+                            </select>
+                        </div>
+                        <div class="calc-group">
+                            <label>الكمية (لتر / اسطوانة)</label>
+                            <input type="number" id="fuel-calc-quantity" value="50" min="0" step="0.5">
+                        </div>
+                        <button id="calc-fuel-full-btn" class="btn-primary btn-full">احسب</button>
+                    </div>
+                    <div class="calc-results" id="fuel-calc-results">
+                        <div class="result-card highlight">
+                            <span class="result-label">التكلفة الإجمالية</span>
+                            <span class="result-value" id="fuel-calc-total">--</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <!-- Electricity Panel -->
+<div class="calc-panel" id="panel-electricity">
+    <div class="calc-card">
+        <h2>⚡ حاسبة فاتورة الكهرباء</h2>
+        <div class="calc-form">
+            <div class="calc-group">
+                <label>نوع الاشتراك</label>
+                <select id="elec-calc-type">
+                    <option value="residential">منزلي</option>
+                    <option value="industrial">صناعي وتجاري</option>
+                </select>
+            </div>
+            <div class="calc-group">
+                <label>استهلاك الشهر (كيلو واط)</label>
+                <input type="number" id="elec-calc-consumption" value="250" min="0" step="10">
+            </div>
+            <button id="calc-elec-full-btn" class="btn-primary btn-full">احسب</button>
+        </div>
+        <div class="calc-results" id="elec-calc-results">
+            <div class="result-card highlight">
+                <span class="result-label">الفاتورة</span>
+                <span class="result-value" id="elec-calc-total">--</span>
+            </div>
+            <div class="result-card">
+                <span class="result-label">متوسط السعر</span>
+                <span class="result-value" id="elec-calc-avg">--</span>
+            </div>
+            <div class="result-card">
+                <span class="result-label">الشريحة</span>
+                <span class="result-value" id="elec-calc-tier">--</span>
+            </div>
+        </div>
+        <div class="tier-breakdown" id="elec-calc-breakdown"></div>
+    </div>
+</div>
+
+        </main>
+
+        <footer class="main-footer compact"><p>© 2026 الليرة عملتنا</p>
+        <p>created by Mohammed 🌊 </p>
+        </footer>
+    </div>
+
+    <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/calculator.js"></script>
+</body>
+</html>

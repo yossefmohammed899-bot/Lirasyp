@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المحفظة الذكية | الليرة عملتنا</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Sidebar Overlay -->
+  <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+      <a href="index.html" class="logo">
+        <!-- تم إضافة اللوغو هنا -->
+        <img src="images/logo.png" alt="الليرة عملتنا" width="44" height="44">
+        <span>الليرة عملتنا</span>
+      </a>
+      <button id="close-sidebar" class="icon-btn" aria-label="إغلاق">✕</button>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="nav-item"><span class="nav-icon">🏠</span> الرئيسية</a>
+      <a href="currencies.html" class="nav-item"><span class="nav-icon">💱</span> أسعار صرف العملات</a>
+      <a href="gold.html" class="nav-item"><span class="nav-icon">🥇</span> أسعار الذهب</a>
+      <a href="crypto.html" class="nav-item"><span class="nav-icon">₿</span> العملات الرقمية</a>
+      <a href="fuel.html" class="nav-item"><span class="nav-icon">⛽</span> أسعار المحروقات</a>
+      <a href="electricity.html" class="nav-item"><span class="nav-icon">⚡</span> أسعار الكهرباء</a>
+      <a href="news.html" class="nav-item"><span class="nav-icon">📰</span>الأخبار العالمية</a>
+      <a href="calculator.html" class="nav-item"><span class="nav-icon">🧮</span> الحاسبة الشاملة</a>
+      <a href="wallet.html" class="nav-item active"><span class="nav-icon">👛</span> المحفظة الذكية</a>
+      <a href="notifications.html" class="nav-item"><span class="nav-icon">🔔</span>إعدادات الإشعارات</a>
+    </nav>
+    <div class="sidebar-footer">
+      <button id="theme-toggle-sidebar" class="theme-toggle">
+        <span>🌙</span> <span>الوضع الليلي</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Wrapper -->
+  <div class="main-wrapper">
+    <!-- Header -->
+    <header class="main-header">
+      <button id="open-sidebar" class="icon-btn" aria-label="القائمة">☰</button>
+      <a href="index.html" class="header-logo">
+        <!-- تم إضافة اللوغو هنا أيضاً -->
+        <img src="images/logo.png" alt="الليرة عملتنا" width="36" height="36">
+        <h1>المحفظة الذكية</h1>      </a>
+      <div class="header-actions">
+        <button id="theme-toggle" class="icon-btn" aria-label="تبديل الوضع">🌙</button>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <main class="page-content">
+      <!-- قسم الرصيد الجديد (مربعين منفصلين وكبيرين) -->
+      <div class="wallet-balance-grid">
+        <div class="balance-box syp-box">
+          <span class="balance-label">الرصيد التقديري (ل.س)</span>
+          <span id="wallet-total-syp" class="balance-amount">--</span>
+        </div>
+        <div class="balance-box usd-box">
+          <span class="balance-label">الرصيد التقديري (USD)</span>
+          <span id="wallet-total-usd" class="balance-amount">--</span>
+        </div>
+      </div>
+
+      <!-- نموذج إضافة أصل -->
+      <div class="add-asset-section">
+        <h2>➕ إضافة أصل</h2>
+        <div class="add-asset-form">
+          <div class="form-group">
+            <label>نوع الأصل</label>
+            <select id="asset-type">
+              <option value="currency">💵 عملة ورقية</option>
+              <option value="gold">🥇 ذهب</option>
+              <option value="crypto">₿ عملة رقمية</option>
+            </select>
+          </div>
+
+          <div id="asset-currency-group" class="form-group">
+            <label>العملة</label>
+            <select id="asset-currency">
+              <option value="USD">🇺🇸 دولار أمريكي (USD)</option>
+              <option value="SYP">🇸🇾 ليرة سورية (SYP)</option>
+              <option value="EUR">🇪🇺 يورو (EUR)</option>
+              <option value="TRY">🇹🇷 ليرة تركية (TRY)</option>
+              <option value="SAR">🇸🇦 ريال سعودي (SAR)</option>
+              <option value="AED">🇦🇪 درهم إماراتي (AED)</option>
+              <option value="QAR">🇶🇦 ريال قطري (QAR)</option>
+              <option value="JOD">🇯🇴 دينار أردني (JOD)</option>
+              <option value="IQD">🇮🇶 دينار عراقي (IQD)</option>
+              <option value="GBP">🇬🇧 جنيه إسترليني (GBP)</option>
+              <option value="CHF">🇨🇭 فرنك سويسري (CHF)</option>
+            </select>
+          </div>
+          <div id="asset-gold-group" class="form-group hidden">
+            <label>عيار الذهب</label>
+            <select id="asset-gold-karat">
+              <option value="24">عيار 24</option>
+              <option value="22">عيار 22</option>
+              <option value="21">عيار 21</option>
+              <option value="18">عيار 18</option>
+              <option value="14">عيار 14</option>
+              <option value="ounce">أونصة (Ounce)</option>
+            </select>
+          </div>
+
+          <div id="asset-crypto-group" class="form-group hidden">
+            <label>العملة الرقمية</label>
+            <select id="asset-crypto">
+              <option value="BTC"> بيتكوين BTC</option>
+              <option value="ETH"> إيثيريوم ETH</option>
+              <option value="BNB">BNB بينانس كوين</option>
+              <option value="SOL">SOL سولانا</option>
+              <option value="ADA">ADA كاردانو</option>
+              <option value="TRX">TRX ترون</option>
+              <option value="USDT"> تيثر USDT</option>
+              <option value="XAUT">XAUT ذهب رقمي</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>الكمية</label>
+            <input type="number" id="asset-amount" placeholder="أدخل الكمية" step="any" min="0">
+          </div>
+
+          <button id="add-asset-btn" class="btn-primary btn-full">إضافة للمحفظة</button>
+        </div>
+      </div>
+
+      <!-- قائمة الأصول -->
+      <div class="wallet-assets">
+        <h2>📊 أصولي</h2>
+        <div id="assets-list" class="assets-list"></div>
+      </div>
+
+      <!-- الرسم البياني -->
+      <div class="wallet-chart">
+        <h2>📈 توزيع الأصول</h2>
+        <div id="wallet-chart" class="chart-container">
+          <p class="chart-placeholder">الرسم البياني سيظهر هنا</p>
+        </div>
+      </div>
+    </main>
+    <!-- Footer -->
+    <footer class="main-footer compact">
+      <p>© 2026 الليرة عملتنا</p>
+      <p>created by Mohammed 🌊</p>
+    </footer>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script src="js/wallet.js"></script>
+</body>
+</html>

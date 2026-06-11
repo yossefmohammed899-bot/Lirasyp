@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://lira-amlatna.com/sitemap.xml
+
+# Crawl-delay: 10

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ar" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>العملات الرقمية | الليرة عملتنا</title>
+    <meta name="description" content="أسعار العملات الرقمية بالليرة السورية - بيتكوين، إيثيريوم، بينانس كوين">
+    <link rel="canonical" href="https://lirasyp.com/crypto.html">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#8b5cf6">
+</head>
+<body>
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+    <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo"><img src="images/logo.png" alt="الليرة عملتنا" width="40" height="40"><span>الليرة عملتنا</span></div>
+            <button id="close-sidebar" class="icon-btn"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="index.html" class="nav-item"><span class="nav-icon">🏠</span><span>الرئيسية</span></a>
+            <a href="currencies.html" class="nav-item"><span class="nav-icon">💱</span><span>أسعار صرف العملات</span></a>
+            <a href="gold.html" class="nav-item"><span class="nav-icon">🥇</span><span>أسعار الذهب</span></a>
+            <a href="crypto.html" class="nav-item active"><span class="nav-icon">₿</span><span>العملات الرقمية</span></a>
+            <a href="fuel.html" class="nav-item"><span class="nav-icon">⛽</span><span>أسعار المحروقات</span></a>
+            <a href="electricity.html" class="nav-item"><span class="nav-icon">⚡</span><span>أسعار الكهرباء</span></a>
+            <a href="news.html" class="nav-item"><span class="nav-icon">📰</span><span>الأخبار العالمية</span></a>
+            <a href="calculator.html" class="nav-item"><span class="nav-icon">🧮</span><span>الحاسبة الشاملة</span></a>
+            <a href="wallet.html" class="nav-item"><span class="nav-icon">👛</span><span>المحفظة الذكية</span></a>
+            <a href="notifications.html" class="nav-item"><span class="nav-icon">🔔</span><span>إعدادات الإشعارات</span></a>
+        </nav>
+        <div class="sidebar-footer">
+            <button id="theme-toggle-sidebar" class="theme-toggle"><span class="theme-icon">🌙</span><span class="theme-text">الوضع الليلي</span></button>
+        </div>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="main-header">
+            <button id="open-sidebar" class="icon-btn"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+            <div class="header-logo"><img src="images/logo.png" alt="الليرة عملتنا" width="32" height="32"><h1>العملات الرقمية</h1></div>
+            <div class="header-actions">
+                <button id="theme-toggle" class="icon-btn">
+                    <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                </button>
+            </div>
+        </header>
+
+        <main class="page-content">
+            <!-- BTC Featured Card -->
+            <section class="currency-cards-grid" id="crypto-cards-grid">
+                <div class="rate-card-large skeleton">
+                    <div class="skeleton-circle"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text short"></div>
+                </div>
+                <div class="rate-card-large skeleton">
+                    <div class="skeleton-circle"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text short"></div>
+                </div>
+                <div class="rate-card-large skeleton">
+                    <div class="skeleton-circle"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text short"></div>
+                </div>
+            </section>
+
+            <!-- Last Update -->
+            <div class="last-update-bar">
+                <span class="last-update" id="last-update">جاري التحديث...</span>
+            </div>
+
+            <!-- Go to Calculator Button -->
+            <section class="calc-link-section">
+                <a href="calculator.html?tab=currency" class="btn-primary btn-full btn-lg calc-link-btn">
+                    <span>🧮</span>
+                    <span>حاسبة العملات </span>
+                    <span>←</span>
+                </a>
+            </section>
+        </main>
+
+        <footer class="main-footer compact"><p>© 2026 الليرة عملتنا</p>
+        <p>created by Mohammed 🌊</p></footer>
+    </div>
+
+    <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/crypto.js"></script>
+</body>
+</html>

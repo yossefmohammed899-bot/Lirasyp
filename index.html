@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ar-SA" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Language" content="ar-SA">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الليرة عملتنا | أسعار صرف العملات والذهب والعملات الرقمية</title>
+    <meta name="description" content="تابع أسعار الليرة السورية والدولار والذهب والعملات الرقمية والمحروقات والكهرباء في سوريا بشكل لحظي">
+    <meta name="keywords" content="ليرة سورية, دولار, ذهب, بيتكوين, محروقات, كهرباء, أسعار الصرف, سوريا">
+    <meta name="author" content="الليرة عملتنا">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="الليرة عملتنا">
+    <meta property="og:description" content="أسعار صرف العملات والذهب والعملات الرقمية في سوريا">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="images/og-image.png">
+    <link rel="canonical" href="https://lirasyp.com/">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0ea5e9">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="الليرة عملتنا">
+</head>
+<body>
+    <!-- Push Notification Popup -->
+    <div id="push-popup" class="push-popup hidden">
+        <div class="push-popup-content">
+            <div class="push-popup-icon">🔔</div>
+            <h3>فعل الإشعارات</h3>
+            <p>احصل على تنبيهات فورية لأسعار الدولار، الذهب، والعملات الرقمية</p>
+            <div class="push-popup-buttons">
+                <a href="notifications.html" id="enable-push" class="btn-primary">تفعيل</a>
+                <button id="dismiss-push" class="btn-ghost">لاحقاً</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Overlay -->
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <img src="images/logo.png" alt="الليرة عملتنا " width="40" height="40">
+                <span>الليرة عملتنا</span>
+            </div>
+            <button id="close-sidebar" class="icon-btn" aria-label="إغلاق القائمة">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="index.html" class="nav-item active">
+                <span class="nav-icon">🏠</span>
+                <span>الرئيسية</span>
+            </a>
+            <a href="currencies.html" class="nav-item">
+                <span class="nav-icon">💱</span>
+                <span>أسعار صرف العملات</span>
+            </a>
+            <a href="gold.html" class="nav-item">
+                <span class="nav-icon">🥇</span>
+                <span>أسعار الذهب</span>
+            </a>
+            <a href="crypto.html" class="nav-item">
+                <span class="nav-icon">₿</span>
+                <span>العملات الرقمية</span>
+            </a>
+            <a href="fuel.html" class="nav-item">
+                <span class="nav-icon">⛽</span>
+                <span>أسعار المحروقات</span>
+            </a>
+            <a href="electricity.html" class="nav-item">
+                <span class="nav-icon">⚡</span>
+                <span>أسعار الكهرباء</span>
+            </a>
+            <a href="news.html" class="nav-item">
+                <span class="nav-icon">📰</span>
+                <span>الأخبار العالمية</span>
+            </a>
+            <a href="calculator.html" class="nav-item">
+                <span class="nav-icon">🧮</span>
+                <span>الحاسبة الشاملة</span>
+            </a>
+            <a href="wallet.html" class="nav-item">
+                <span class="nav-icon">👛</span>
+                <span>المحفظة الذكية</span>
+            </a>
+            <a href="notifications.html" class="nav-item">
+                <span class="nav-icon">🔔</span>
+                <span>إعدادات الإشعارات</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <button id="theme-toggle-sidebar" class="theme-toggle" aria-label="تبديل الوضع">
+                <span class="theme-icon">🌙</span>
+                <span class="theme-text">الوضع الليلي</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-wrapper">
+        <!-- Header -->
+        <header class="main-header">
+            <button id="open-sidebar" class="icon-btn" aria-label="فتح القائمة">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+            <div class="header-logo">
+                <img src="images/logo.png" alt="الليرة عملتنا" width="32" height="32">
+                <h1>الليرة عملتنا</h1>
+            </div>
+            <div class="header-actions">
+                <button id="theme-toggle" class="icon-btn" aria-label="تبديل الوضع">
+                    <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+                <a href="notifications.html" class="icon-btn notification-btn" aria-label="الإشعارات">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                    <span class="notification-badge hidden">0</span>
+                </a>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h2 class="hero-title">الليرة عملتنا</h2>
+                <p class="hero-subtitle">تتبع أسعار صرف العملات والذهب والكريبتو في مكان واحد</p>
+            </div>
+        </section>
+
+        <!-- Main Rates Cards -->
+        <section class="main-rates">
+            <!-- USD Card -->
+            <div class="rate-card-large" id="usd-card">
+                <div class="rate-card-header">
+                    <div class="rate-card-icon">💵</div>
+                    <div class="rate-card-title">
+                        <h3>الدولار الأمريكي</h3>
+                        <span class="rate-card-code">USD / SYP</span>
+                    </div>
+                </div>
+                <div class="rate-card-body">
+                    <div class="rate-side">
+                        <span class="rate-side-label">سعر الشراء</span>
+                        <span class="rate-side-value" id="usd-buy">--</span>
+                    </div>
+                    <div class="rate-divider"></div>
+                    <div class="rate-side">
+                        <span class="rate-side-label">سعر البيع</span>
+                        <span class="rate-side-value" id="usd-sell">--</span>
+                    </div>
+                </div>
+                <div class="rate-card-footer">
+                    <span class="rate-change" id="usd-change">--</span>
+                    <span class="rate-time" id="usd-time">آخر تحديث: --</span>
+                </div>
+            </div>
+
+            <!-- TRY Card -->
+            <div class="rate-card-large" id="try-card">
+                <div class="rate-card-header">
+                    <div class="rate-card-icon">🇹🇷</div>
+                    <div class="rate-card-title">
+                        <h3>الليرة التركية</h3>
+                        <span class="rate-card-code">TRY / SYP</span>
+                    </div>
+                </div>
+                <div class="rate-card-body">
+                    <div class="rate-side">
+                        <span class="rate-side-label">سعر الشراء</span>
+                        <span class="rate-side-value" id="try-buy">--</span>
+                    </div>
+                    <div class="rate-divider"></div>
+                    <div class="rate-side">
+                        <span class="rate-side-label">سعر البيع</span>
+                        <span class="rate-side-value" id="try-sell">--</span>
+                    </div>
+                </div>
+                <div class="rate-card-footer">
+                    <div class="rate-extra">
+                        <span class="rate-extra-label">سعر الليرة التركية بالدولار</span>
+                        <span class="rate-extra-value" id="try-usd">--</span>
+                    </div>
+                    <span class="rate-change" id="try-change">--</span>
+                    <span class="rate-time" id="try-time">آخر تحديث: --</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sections Grid -->
+        <section class="sections-grid">
+            <a href="currencies.html" class="section-card">
+                <div class="section-icon">💱</div>
+                <h3>أسعار صرف العملات</h3>
+                <p>تابع أسعار الليرة مقابل الدولار واليورو والليرة التركية وغيرها</p>
+                <div class="section-arrow">←</div>
+            </a>
+            <a href="gold.html" class="section-card">
+                <div class="section-icon">🥇</div>
+                <h3>أسعار الذهب</h3>
+                <p>أسعار الذهب عيار 24, 22, 21, 18, 14 بالليرة السورية الجديدة</p>
+                <div class="section-arrow">←</div>
+            </a>
+            <a href="crypto.html" class="section-card">
+                <div class="section-icon">₿</div>
+                <h3>العملات الرقمية</h3>
+                <p>بيتكوين، إيثيريوم، بينانس كوين وغيرها بالليرة السورية</p>
+                <div class="section-arrow">←</div>
+            </a>
+            <a href="fuel.html" class="section-card">
+                <div class="section-icon">⛽</div>
+                <h3>أسعار المحروقات</h3>
+                <p>أسعار البنزين، المازوت، والغاز في سوريا</p>
+                <div class="section-arrow">←</div>
+            </a>
+            <a href="electricity.html" class="section-card">
+                <div class="section-icon">⚡</div>
+                <h3>أسعار الكهرباء</h3>
+                <p>تعرفة الكهرباء والشرائح الاستهلاكية</p>
+                <div class="section-arrow">←</div>
+            </a>
+            <a href="news.html" class="section-card">
+                <div class="section-icon">📰</div>
+                <h3>الأخبار العالمية</h3>
+                <p>آخر الأخبار والمستجدات في العالم</p>
+                <div class="section-arrow">←</div>
+            </a>
+        </section>
+
+        <!-- Latest News -->
+        <section class="latest-news">
+            <div class="section-header">
+                <h2>📰 آخر الأخبار</h2>
+                <a href="news.html" class="link-arrow">عرض الكل ←</a>
+            </div>
+            <div class="news-grid" id="news-grid">
+                <div class="news-skeleton">
+                    <div class="skeleton-img"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text short"></div>
+                </div>
+                <div class="news-skeleton">
+                    <div class="skeleton-img"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text short"></div>
+                </div>
+                <div class="news-skeleton">
+                    <div class="skeleton-img"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text short"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="main-footer">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="images/logo.png" alt="الليرة عملتنا" width="40" height="40">
+                    <h3>الليرة عملتنا</h3>
+                    <p>منصتك الموثوقة لمتابعة أسعار صرف   العملات والذهب والعملات الرقمية في سوريا</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>الأقسام</h4>
+                        <a href="currencies.html">أسعار صرف العملات</a>
+                        <a href="gold.html">أسعار الذهب</a>
+                        <a href="crypto.html">العملات الرقمية</a>
+                        <a href="fuel.html">أسعار المحروقات</a>
+                        <a href="electricity.html">أسعار الكهرباء</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>الأدوات</h4>
+                        <a href="calculator.html">الحاسبة الشاملة</a>
+                        <a href="wallet.html">المحفظة الذكية</a>
+                        <a href="notifications.html">إعدادات الإشعارات</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 الليرة عملتنا </p>
+                <p>created by Mohammed 🌊</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(reg => console.log('SW registered'))
+                .catch(err => console.log('SW error:', err));
+        }
+    </script>
+    <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/push-notifications.js"></script>
+</body>
+                        </html>
