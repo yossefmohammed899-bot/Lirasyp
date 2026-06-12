@@ -1067,147 +1067,163 @@
         // ============================================
         // SEND NOTIFICATION
         // ============================================
-        async function sendNotification(isTest = false) {
-            const title = document.getElementById('notif-title').value.trim();
-            const body = document.getElementById('notif-body').value.trim();
-            const url = document.getElementById('notif-url').value.trim() || 'https://lira12.vercel.app/';
-            const target = document.querySelector('input[name="target"]:checked').value;
+      async function sendNotification(isTest = false) {
+    const title = document.getElementById('notif-title').value.trim();
+    const body = document.getElementById('notif-body').value.trim();
+    const url = document.getElementById('notif-url').value.trim() || 'https://lira12.vercel.app/';
+    const target = document.querySelector('input[name="target"]:checked').value;
 
-            if (!title || !body) {
-                showToast('❌ العنوان والمحتوى مطلوبين', 'error');
-                return;
+    if (!title || !body) {
+        showToast('❌ العنوان والمحتوى مطلوبين', 'error');
+        return;
+    }
+
+    const sendBtn = document.getElementById('send-btn');
+    const testBtn = document.getElementById('test-btn');
+    const progressContainer = document.getElementById('send-progress');
+    const progressFill = document.getElementById('progress-fill');
+    const progressText = document.getElementById('progress-text');
+    const progressCount = document.getElementById('progress-count');
+
+    sendBtn.disabled = true;
+    testBtn.disabled = true;
+    sendBtn.innerHTML = '<span class="spinner"></span><span>جاري الإرسال...</span>';
+
+    try {
+        let filter = 'is_active=eq.true';
+        if (target !== 'all') {
+            const targetMap = {
+                'currencies': 'notif_all_currencies',
+                'gold': 'notif_gold',
+                'crypto': 'notif_all_crypto',
+                'fuel': 'notif_fuel',
+                'news': 'notif_news'
+            };
+            const column = targetMap[target];
+            if (column) filter += `&${column}=eq.true`;
+        }
+
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/push_subscriptions?select=*&${filter}`, {
+            headers: {
+                'apikey': SUPABASE_ANON_KEY,
+                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
             }
+        });
 
-            const sendBtn = document.getElementById('send-btn');
-            const testBtn = document.getElementById('test-btn');
-            const progressContainer = document.getElementById('send-progress');
-            const progressFill = document.getElementById('progress-fill');
-            const progressText = document.getElementById('progress-text');
-            const progressCount = document.getElementById('progress-count');
+        const subscribers = await response.json();
 
-            sendBtn.disabled = true;
-            testBtn.disabled = true;
-            sendBtn.innerHTML = '<span class="spinner"></span><span>جاري الإرسال...</span>';
+        if (!subscribers || subscribers.length === 0) {
+            showToast('⚠️ لا يوجد مشتركين بهالفئة', 'warning');
+            sendBtn.disabled = false;
+            testBtn.disabled = false;
+            sendBtn.innerHTML = '<span>📨</span><span>إرسال الإشعار</span>';
+            return;
+        }
 
-            try {
-                let filter = 'is_active=eq.true';
-                if (target !== 'all') {
-                    const targetMap = {
-                        'currencies': 'notif_all_currencies',
-                        'gold': 'notif_gold',
-                        'crypto': 'notif_all_crypto',
-                        'fuel': 'notif_fuel',
-                        'news': 'notif_news'
-                    };
-                    const column = targetMap[target];
-                    if (column) filter += `&${column}=eq.true`;
-                }
+        if (isTest) {
+            const testSub = subscribers[0];
+            console.log('Sending test to:', testSub.endpoint.substring(0, 50) + '...');
 
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/push_subscriptions?select=*&${filter}`, {
-                    headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-                    }
-                });
+            const result = await fetch('/api/send-notification', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    endpoint: testSub.endpoint,
+                    // التعديل السحري هنا: إضافة مفاتيح التشفير
+                    keys: {
+                        auth: testSub.auth,
+                        p256dh: testSub.p256dh
+                    },
+                    title: `🧪 ${title}`,
+                    body: body,
+                    url: url
+                })
+            });
 
-                const subscribers = await response.json();
+            const resultData = await result.json().catch(() => ({}));
+            console.log('Test result:', result.status, resultData);
 
-                if (!subscribers || subscribers.length === 0) {
-                    showToast('⚠️ لا يوجد مشتركين بهالفئة', 'warning');
-                    return;
-                }
+            if (result.ok) {
+                showToast('✅ تم إرسال الإشعار التجريبي', 'success');
+            } else {
+                throw new Error(resultData.error || resultData.hint || `HTTP ${result.status}: فشل الإرسال`);
+            }
+            sendBtn.disabled = false;
+            testBtn.disabled = false;
+            sendBtn.innerHTML = '<span>📨</span><span>إرسال الإشعار</span>';
+            return;
+        }
 
-                if (isTest) {
-                    const testSub = subscribers[0];
-                    console.log('Sending test to:', testSub.endpoint.substring(0, 50) + '...');
+        progressContainer.classList.add('active');
+        let sent = 0;
+        let failed = 0;
 
-                    const result = await fetch('/api/send-notification', {
+        const batchSize = 5;
+        for (let i = 0; i < subscribers.length; i += batchSize) {
+            const batch = subscribers.slice(i, i + batchSize);
+
+            const results = await Promise.allSettled(
+                batch.map(sub => 
+                    fetch('/api/send-notification', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                            endpoint: testSub.endpoint,
-                            title: `🧪 ${title}`,
+                            endpoint: sub.endpoint,
+                            // التعديل السحري هنا أيضاً للمشتركين الفعليين
+                            keys: {
+                                auth: sub.auth,
+                                p256dh: sub.p256dh
+                            },
+                            title: title,
                             body: body,
                             url: url
                         })
-                    });
+                    })
+                )
+            );
 
-                    const resultData = await result.json().catch(() => ({}));
-                    console.log('Test result:', result.status, resultData);
-
-                    if (result.ok) {
-                        showToast('✅ تم إرسال الإشعار التجريبي', 'success');
+            for (const r of results) {
+                if (r.status === 'fulfilled' && r.value.ok) {
+                    sent++;
+                } else {
+                    failed++;
+                    if (r.status === 'fulfilled') {
+                        const errData = await r.value.json().catch(() => ({}));
+                        console.error('Push failed:', r.value.status, errData);
                     } else {
-                        throw new Error(resultData.error || resultData.hint || `HTTP ${result.status}: فشل الإرسال`);
+                        console.error('Push error:', r.reason);
                     }
-                    return;
                 }
-
-                progressContainer.classList.add('active');
-                let sent = 0;
-                let failed = 0;
-
-                const batchSize = 5;
-                for (let i = 0; i < subscribers.length; i += batchSize) {
-                    const batch = subscribers.slice(i, i + batchSize);
-
-                    const results = await Promise.allSettled(
-                        batch.map(sub => 
-                            fetch('/api/send-notification', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({
-                                    endpoint: sub.endpoint,
-                                    title: title,
-                                    body: body,
-                                    url: url
-                                })
-                            })
-                        )
-                    );
-
-                    for (const r of results) {
-                        if (r.status === 'fulfilled' && r.value.ok) {
-                            sent++;
-                        } else {
-                            failed++;
-                            if (r.status === 'fulfilled') {
-                                const errData = await r.value.json().catch(() => ({}));
-                                console.error('Push failed:', r.value.status, errData);
-                            } else {
-                                console.error('Push error:', r.reason);
-                            }
-                        }
-                    }
-
-                    const progress = ((sent + failed) / subscribers.length) * 100;
-                    progressFill.style.width = `${progress}%`;
-                    progressCount.textContent = `${sent + failed} / ${subscribers.length}`;
-                    progressText.textContent = `تم الإرسال: ${sent} | فشل: ${failed}`;
-                }
-
-                saveToHistory({ title, body, url, target, sent, failed, total: subscribers.length });
-
-                showToast(`✅ تم الإرسال! نجح: ${sent} | فشل: ${failed}`, 'success');
-
-                document.getElementById('notif-title').value = '';
-                document.getElementById('notif-body').value = '';
-                document.getElementById('notif-url').value = '';
-                updatePreview();
-                loadStats();
-
-            } catch (err) {
-                console.error('Send error:', err);
-                showToast('❌ فشل الإرسال: ' + (err.message || 'خطأ غير معروف'), 'error');
-            } finally {
-                sendBtn.disabled = false;
-                testBtn.disabled = false;
-                sendBtn.innerHTML = '<span>📨</span><span>إرسال الإشعار</span>';
-                setTimeout(() => progressContainer.classList.remove('active'), 3000);
             }
+
+            const progress = ((sent + failed) / subscribers.length) * 100;
+            progressFill.style.width = `${progress}%`;
+            progressCount.textContent = `${sent + failed} / ${subscribers.length}`;
+            progressText.textContent = `تم الإرسال: ${sent} | فشل: ${failed}`;
         }
 
-        // ============================================
+        saveToHistory({ title, body, url, target, sent, failed, total: subscribers.length });
+
+        showToast(`✅ تم الإرسال! نجح: ${sent} | فشل: ${failed}`, 'success');
+
+        document.getElementById('notif-title').value = '';
+        document.getElementById('notif-body').value = '';
+        document.getElementById('notif-url').value = '';
+        updatePreview();
+        loadStats();
+
+    } catch (err) {
+        console.error('Send error:', err);
+        showToast('❌ فشل الإرسال: ' + (err.message || 'خطأ غير معروف'), 'error');
+    } finally {
+        sendBtn.disabled = false;
+        testBtn.disabled = false;
+        sendBtn.innerHTML = '<span>📨</span><span>إرسال الإشعار</span>';
+        setTimeout(() => progressContainer.classList.remove('active'), 3000);
+    }
+}
+
+  // ============================================
         // LOAD SUBSCRIBERS
         // ============================================
         async function loadSubscribers() {
