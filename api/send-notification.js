@@ -1,12 +1,6 @@
-//  ============================================
-// API: Send Push Notification
-// Vercel Serverless Function - /api/send-notification
-// ============================================
-
 import webPush from 'web-push';
 
 export default async function handler(req, res) {
-  // CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -24,43 +18,45 @@ export default async function handler(req, res) {
   const subject = process.env.VAPID_SUBJECT || 'mailto:admin@lirasyp.com';
 
   if (!publicKey || !privateKey) {
-    return res.status(500).json({
-      error: 'VAPID keys not configured',
-      hint: 'Add VAPID_PUBLIC_KEY and VAPID_PRIVATE_KEY to Vercel Environment Variables'
-    });
+    return res.status(500).json({ error: 'VAPID keys not configured' });
   }
 
   webPush.setVapidDetails(subject, publicKey, privateKey);
 
   try {
-    const { endpoint, title, body, url, icon, badge } = req.body;
+    // استقبال الـ keys من الطلب
+    const { endpoint, keys, title, body, url, icon, badge } = req.body;
 
-    if (!endpoint) {
-      return res.status(400).json({ error: 'Endpoint required' });
+    if (!endpoint || !keys || !keys.auth || !keys.p256dh) {
+      return res.status(400).json({ error: 'Endpoint and encryption keys (auth, p256dh) are required' });
     }
 
+    // بناء كائن الاشتراك الكامل للتشفير
+    const pushSubscription = {
+      endpoint: endpoint,
+      keys: {
+        auth: keys.auth,
+        p256dh: keys.p256dh
+      }
+    };
+
     const payload = JSON.stringify({
-      title: title || 'الليرة عملتنا 📊',
-      body: body || 'تنبيه جديد',
+      title: title || 'الليرة عملتنا',
+      body: body || 'إشعار جديد',
       url: url || '/',
-      icon: icon || '/images/logo.svg',
+      icon: icon || '/images/icon-192x192.png',
       badge: badge || '/images/favicon.png'
     });
 
-    await webPush.sendNotification({ endpoint }, payload);
+    // إرسال الإشعار
+    await webPush.sendNotification(pushSubscription, payload);
 
-    res.status(200).json({ success: true });
-
+    return res.status(200).json({ success: true });
   } catch (error) {
-    console.error('Push error:', error);
-
-    if (error.statusCode === 410) {
-      return res.status(410).json({
-        error: 'Subscription expired',
-        shouldRemove: true
-      });
+    console.error('Push Error:', error);
+    if (error.statusCode === 410 || error.statusCode === 404) {
+      return res.status(410).json({ error: 'Subscription expired' });
     }
-
-    res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: 'Failed to send notification', details: error.message });
   }
 }
